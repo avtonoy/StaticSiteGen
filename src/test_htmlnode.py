@@ -4,7 +4,7 @@ import unittest
 
 
 from htmlnode import HTMLNode 
-from htmlnode import LeafNode
+from htmlnode import LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
 
@@ -52,7 +52,66 @@ class TestLeafNode(unittest.TestCase):
         node = self.define_testnode()[3]
         self.assertEqual(node.to_html(),'Hello world!')
 
+class TestParentNode(unittest.TestCase): 
+    def test_to_html(self): 
+        node = ParentNode(
+        "p",
+        [
+            LeafNode("b", "Bold text"),
+            LeafNode(None, "Normal text"),
+            LeafNode("i", "italic text"),
+            LeafNode(None, "Normal text"),
+        ],
+        )
 
+        self.assertEqual('<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>',node.to_html())
+        
+    def test_to_html_with_children(self):
+        child_node = LeafNode("span", "child")
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(parent_node.to_html(), "<div><span>child</span></div>")
+        
+    
+    def test_to_html_with_grandchildren(self):
+        grandchild_node = LeafNode("b", "grandchild")
+        child_node = ParentNode("span", [grandchild_node])
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(
+            parent_node.to_html(),
+            "<div><span><b>grandchild</b></span></div>",
+        )
+    
+    def test_to_html_with_props(self): 
+        node = ParentNode(
+        "p",
+        [
+            LeafNode("b", "Bold text"),
+            LeafNode(None, "Normal text"),
+            LeafNode("i", "italic text"),
+            LeafNode(None, "Normal text"),
+        ],{'html': 'nice', 'php': 'nicer'}
+        )
+
+        self.assertEqual('<p html="nice" php="nicer">' +
+                         '<b>Bold text</b>Normal text<i>'+
+                         'italic text</i>Normal text</p>',node.to_html())
+        
+    def test_to_html_without_children(self):
+            node = ParentNode("p",props={'html': 'nice', 'php': 'nicer'})
+
+            with self.assertRaisesRegex(ValueError,'no children given for Parent Node'): 
+                node.to_html()
+    
+    def test_to_html_without_tag(self): 
+        node = ParentNode(
+            children=[
+                LeafNode("b", "Bold text"),
+                LeafNode(None, "Normal text"),
+                LeafNode("i", "italic text"),
+                LeafNode(None, "Normal text"),
+            ],props={'html': 'nice', 'php': 'nicer'})
+        with self.assertRaisesRegex(ValueError,'not tag given for Parenet Node'):
+            node.to_html()
     
 if __name__ == '__main__':
     unittest.main(verbosity=True)
