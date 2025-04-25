@@ -97,13 +97,13 @@ class TestParentNode(unittest.TestCase):
                          'italic text</i>Normal text</p>',node.to_html())
         
     def test_to_html_without_children(self):
-            node = ParentNode("p",props={'html': 'nice', 'php': 'nicer'})
+            node = ParentNode("p",props={'html': 'nice', 'php': 'nicer'},children=None)
 
             with self.assertRaisesRegex(ValueError,'no children given for Parent Node'): 
                 node.to_html()
     
     def test_to_html_without_tag(self): 
-        node = ParentNode(
+        node = ParentNode(tag=None,
             children=[
                 LeafNode("b", "Bold text"),
                 LeafNode(None, "Normal text"),
