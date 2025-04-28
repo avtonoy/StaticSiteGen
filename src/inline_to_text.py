@@ -84,4 +84,12 @@ def split_nodes_link(old_node:list[TextNode]):
     pass
 
 
-# \!\[(.*?)\]\((.*?)\)
+def text_to_textnodes(text:str): 
+    # input= 'This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)'
+    init_node=[TextNode(text=text,text_type=TextType.TEXT)]
+    bold_node=split_nodes_delimiter(init_node,'**',text_type=TextType.BOLD)
+    italic_node=split_nodes_delimiter(bold_node,'_',text_type=TextType.ITALIC)
+    code_node=split_nodes_delimiter(italic_node,'`',text_type=TextType.CODE)
+    link_node=split_nodes_url(code_node,url_type=TextType.LINK)
+    return split_nodes_url(link_node,url_type=TextType.IMAGE)
+

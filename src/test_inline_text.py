@@ -91,5 +91,14 @@ class TestInlineText(unittest.TestCase):
         cap = output_capture.getvalue()
         self.assertEqual(cap,target)
         
+    def test_text_to_nodes(self): 
+        input = 'This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)'
+        output_capture = io.StringIO()
+        sys.stdout = output_capture
+        print (text_to_textnodes(input))
+        sys.stdout = sys.__stdout__
+        cap = output_capture.getvalue()
+        self.assertEqual(cap,'[TextNode(This is , normal, None), TextNode(text, bold, None), TextNode( with an , normal, None), TextNode(italic, italic, None), TextNode( word and a , normal, None), TextNode(code block, code, None), TextNode( and an , normal, None), TextNode(obi wan image, image, https://i.imgur.com/fJRm4Vk.jpeg), TextNode( and a, normal, None), TextNode(link, link, https://boot.dev)]\n')
+        
 if __name__ == "__main__":
     unittest.main()
