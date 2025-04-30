@@ -12,11 +12,18 @@ class BlockType(Enum):
     ORDERED_LIST = 'ordered_list'
 
 
-def markdown_to_block(markdown: str):
-    return list(map(lambda x: x.strip('\n').strip(' '), markdown.split('\n\n')))
+def markdown_to_block(markdown: str) -> list[str]:
+    block_list = []
+    for block in markdown.split('\n\n'):
+        if len(block.strip()) == 0:
+            continue
+        block_list.append(block.strip())
+    return block_list
 
 
 def check_heading(block: str):
+    if len(block) == 0:
+        return False
     if block[0] == '#':
         return None != re.match(r'\#{1,6}\ {1}[a-zA-Z]', block)
     return False
@@ -29,6 +36,8 @@ def check_code(block: str):
 def check_quote(block: str):
     lines = list(map(lambda x: x.strip(' '), block.split('\n')))
     for line in lines:
+        if len(line) == 0:
+            return False
         if line[0] == '>':
             pass
         else:
