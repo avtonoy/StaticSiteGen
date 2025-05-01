@@ -51,5 +51,16 @@ This is a Paragraph about **bold people**
             html, '<div><h2>Heading2</h2><h3>And Thise Heading3</h3><h1>the Great Heading1</h1><p>This is a Paragraph about <b>bold people</b></p></div>')
 
 
+    def test_lists_block(self):
+        md='''This a paragraph
+
+- First item unorder List in _italic_
+- Second item unorder list in **bold**
+
+1. First item ordered list
+2. Second item **ordered** list'''
+
+        node=markdown_to_html_node(md)
+        print(node.to_html())
 if __name__ == "__main__":
     unittest.main()

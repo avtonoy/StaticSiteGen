@@ -30,11 +30,19 @@ def block_to_ParentNode(block: str, block_type: BlockType) -> ParentNode:
             block = block.lstrip(heading_int*'#'+' ')
             children = text_to_children(block.replace('\n', ' '))
             return ParentNode(tag='h'+str(heading_int), children=children)
-        case BlockType.UNORDERED_LIST:
+        case BlockType.UNORDERED_LIST :
             parentlist = []
             items = block.split('\n')
             for item in items:
-                pass
+                children = text_to_children(item.lstrip('- '))
+                parentlist.append(ParentNode(tag='li',children=children))
+            return ParentNode(tag='ul',children=parentlist)
+        case BlockType.ORDERED_LIST: 
+            parentlist = []
+            items = block.split('\n')
+            for item in items: 
+                pass     
+
 
 
 def markdown_to_html_node(md: str) -> ParentNode:
