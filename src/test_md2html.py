@@ -50,9 +50,8 @@ This is a Paragraph about **bold people**
         self.assertEqual(
             html, '<div><h2>Heading2</h2><h3>And Thise Heading3</h3><h1>the Great Heading1</h1><p>This is a Paragraph about <b>bold people</b></p></div>')
 
-
     def test_lists_block(self):
-        md='''This a paragraph
+        md = '''This a paragraph
 
 - First item unorder List in _italic_
 - Second item unorder list in **bold**
@@ -60,7 +59,20 @@ This is a Paragraph about **bold people**
 1. First item ordered list
 2. Second item **ordered** list'''
 
-        node=markdown_to_html_node(md)
-        print(node.to_html())
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html, '<div><p>This a paragraph</p><ul><li>First item unorder List in <i>italic</i></li><li>Second item unorder list in <b>bold</b></li></ul><ol><li>First item ordered list</li><li>Second item <b>ordered</b> list</li></ol></div>'
+        )
+
+    def test_quote_block(self):
+        md = '''>erster Quote **bold**
+>zweiter quuote in _italic_ kursiv junge'''
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(html,
+                         '<div><blockquote>erster Quote <b>bold</b>zweiter quuote in <i>italic</i> kursiv junge</blockquote></div>')
+
+
 if __name__ == "__main__":
     unittest.main()
