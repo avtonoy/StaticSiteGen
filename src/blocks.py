@@ -36,8 +36,6 @@ def check_code(block: str):
 def check_quote(block: str):
     lines = list(map(lambda x: x.strip(' '), block.split('\n')))
     for line in lines:
-        if len(line) == 0:
-            return False
         if line[0] == '>':
             pass
         else:
