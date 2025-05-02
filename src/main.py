@@ -19,20 +19,20 @@ def main():
         shutil.rmtree(path_to_public)
     os.mkdir(path_to_public)
     copy_static_to_public(path_to_static, path_to_public)
-    generate_page_recursive(path_to_src_page, path_to_template, path_to_content)
+    generate_page_recursive(path_to_content, path_to_template, path_to_public)
 
 
 def generate_page_recursive(src_content: os.path, template: os.path, dst: os.path):
     list_objects = os.listdir(src_content)
     for obj in list_objects:
         path_src = os.path.join(src_content,obj)
-        if obj != os.path.isfile(obj): 
-            path_dst = os.path.join(dst,obj)
+        path_dst = os.path.join(dst,obj)
+        if not os.path.isfile(path_src):             
             os.mkdir(path_dst)
             generate_page_recursive(path_src,template,path_dst) 
             continue     
-        if obj == 'index.md' and os.path.isfile(obj): 
-            path_dst = os.path.join(dst,obj.split('.')[1]+'html')
+        if obj == 'index.md': 
+            path_dst = os.path.join(dst,obj.split('.')[0]+'.html')
             generate_page(path_src,template,path_dst)
         
 
