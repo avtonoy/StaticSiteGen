@@ -81,3 +81,12 @@ def block_to_block_type(block: str) -> BlockType:
         return BlockType.ORDERED_LIST
 
     return BlockType.PARAGRAPH
+
+
+def extract_title(md:str)->str: 
+    blocks = markdown_to_block(md)
+    for block in blocks: 
+        type_of_block = block_to_block_type(block)
+        if type_of_block == BlockType.HEADING: 
+            if len(re.findall(r'^\#{1}\ ',block)) > 0: 
+                return block[2:].strip()

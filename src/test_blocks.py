@@ -40,6 +40,10 @@ This is the same paragraph on a new line
         self.assertEqual(block_to_block_type(
             '1. first element \n 2.Second Element'), BlockType.PARAGRAPH)
 
-
+    def test_extract_title(self):
+        md = '# Tolkin toll     '
+        title=extract_title(md)
+        self.assertEqual(title,'Tolkin toll')
+        
 if __name__ == "__main__":
     unittest.main()
