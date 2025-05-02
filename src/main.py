@@ -1,15 +1,25 @@
 
 import os
 import shutil
+import sys
 from blocks import extract_title
 from md2html import markdown_to_html_node
 
 
-path_to_static = os.path.join(os.path.abspath('.'), 'static')
-path_to_public = os.path.join(os.path.abspath('.'), 'public')
-path_to_content = os.path.join(os.path.abspath('.'), 'content')
+args = sys.argv
+if len(args) > 1:
+    arg = args[1].strip()
+    print(arg)
+    basepath = os.path.abspath(arg)
+else:
+    basepath = os.path.abspath('.')
+
+
+path_to_static = os.path.join(basepath, 'static')
+path_to_public = os.path.join(basepath, 'docs')
+path_to_content = os.path.join(basepath, 'content')
 path_to_src_page = os.path.join(path_to_content, 'index.md')
-path_to_template = os.path.join(os.path.abspath('.'), 'template.html')
+path_to_template = os.path.join(basepath, 'template.html')
 path_to_index = os.path.join(path_to_public, 'index.html')
 
 
@@ -25,16 +35,15 @@ def main():
 def generate_page_recursive(src_content: os.path, template: os.path, dst: os.path):
     list_objects = os.listdir(src_content)
     for obj in list_objects:
-        path_src = os.path.join(src_content,obj)
-        path_dst = os.path.join(dst,obj)
-        if not os.path.isfile(path_src):             
+        path_src = os.path.join(src_content, obj)
+        path_dst = os.path.join(dst, obj)
+        if not os.path.isfile(path_src):
             os.mkdir(path_dst)
-            generate_page_recursive(path_src,template,path_dst) 
-            continue     
-        if obj == 'index.md': 
-            path_dst = os.path.join(dst,obj.split('.')[0]+'.html')
-            generate_page(path_src,template,path_dst)
-        
+            generate_page_recursive(path_src, template, path_dst)
+            continue
+        if obj == 'index.md':
+            path_dst = os.path.join(dst, obj.split('.')[0]+'.html')
+            generate_page(path_src, template, path_dst)
 
     pass
 
@@ -48,7 +57,7 @@ def generate_page(src_page: os.path, template: os.path, dst_file: os.path):
 
     with open(template, 'r') as file:
         public_html = file.read().replace(
-            u'{{ Title }}', title).replace(u'{{ Content }}', html)
+            u'{{ Title }}', title).replace(u'{{ Content }}', html).replace('href="/', f'href="{basepath}').replace('src="/', f'src="{basepath}')
 
     with open(dst_file, 'w') as file:
         file.write(public_html)
