@@ -11,16 +11,19 @@ if len(args) > 1:
     arg = args[1].strip()
     print(arg)
     basepath = os.path.abspath(arg)
+    URL_path=arg + '/'
 else:
     basepath = os.path.abspath('.')
+    URL_path = '/'
 
-
+print(URL_path)
 path_to_static = os.path.join(basepath, 'static')
 path_to_public = os.path.join(basepath, 'docs')
 path_to_content = os.path.join(basepath, 'content')
 path_to_src_page = os.path.join(path_to_content, 'index.md')
 path_to_template = os.path.join(basepath, 'template.html')
 path_to_index = os.path.join(path_to_public, 'index.html')
+
 
 
 def main():
@@ -57,7 +60,7 @@ def generate_page(src_page: os.path, template: os.path, dst_file: os.path):
 
     with open(template, 'r') as file:
         public_html = file.read().replace(
-            u'{{ Title }}', title).replace(u'{{ Content }}', html).replace('href="/', f'href="{basepath}').replace('src="/', f'src="{basepath}')
+            u'{{ Title }}', title).replace(u'{{ Content }}', html).replace('href="/', f'href="{URL_path}').replace('src="/', f'src="{URL_path}')
 
     with open(dst_file, 'w') as file:
         file.write(public_html)
