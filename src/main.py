@@ -16,6 +16,7 @@ else:
     basepath = os.path.abspath('.')
     URL_path = '/'
 
+basepath=os.path.abspath('.')
 print(URL_path)
 path_to_static = os.path.join(basepath, 'static')
 path_to_public = os.path.join(basepath, 'docs')
